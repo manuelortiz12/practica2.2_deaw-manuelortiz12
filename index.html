@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>My Docs</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">My Docs</a>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#practica-22-autenticacion-en-nginx" class="nav-link">PRÁCTICA 2.2: Autenticación en Nginx</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#instalacion-de-paquetes-necesarios" class="nav-link">Instalación de paquetes necesarios</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#creacion-de-usuarios-y-contrasenas" class="nav-link">Creación de usuarios y contraseñas</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#configurando-el-servidor-nginx-para-usar-autenticacion-basica" class="nav-link">Configurando el servidor Nginx para usar autenticación básica</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#combinacion-de-la-autenticacion-basica-con-la-restriccion-de-acceso-por-ip" class="nav-link">Combinación de la autenticación básica con la restricción de acceso por IP</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#tareas" class="nav-link">TAREAS</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#cuestiones-finales" class="nav-link">CUESTIONES FINALES</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="practica-22-autenticacion-en-nginx">PRÁCTICA 2.2: Autenticación en Nginx</h1>
+<h2 id="instalacion-de-paquetes-necesarios">Instalación de paquetes necesarios</h2>
+<p>Comprobamos que la herramienta openssl está instalada:</p>
+<p><img alt="alt" src="capturas/1.png" /></p>
+<p>En mi caso esta venía instalada por defecto, si no lo estuviera solo habría que instalarla</p>
+<h2 id="creacion-de-usuarios-y-contrasenas">Creación de usuarios y contraseñas</h2>
+<p>Creamos un archivo oculto ".htpasswd"  donde guardar usuarios y contraseñas, y añadimos nuestro primer usuario "manuel":</p>
+<p><img alt="alt" src="capturas/2.png" /></p>
+<p>Y a continuación añadimos una contraseña cifrada para este:</p>
+<p><img alt="alt" src="capturas/3.png" /></p>
+<p>He creado dos usuarios, y voy a comprobar si ambos han sido creados y con clave cifrada:</p>
+<p><img alt="alt" src="capturas/5.png" /></p>
+<h2 id="configurando-el-servidor-nginx-para-usar-autenticacion-basica">Configurando el servidor Nginx para usar autenticación básica</h2>
+<p>Utilizaremos la directiva auth_basic dentro del location y le pondremos el nombre a nuestro dominio que será mostrado al usuario al solicitar las credenciales. Por último, configuramos Nginx para que utilice el fichero que previamente hemos creado con la directiva auth_basic_user_file :</p>
+<p><img alt="alt" src="capturas/6.png" /></p>
+<pre><code>Comprobación 1
+
+Comprueba desde tu máquina física/anfitrión que puedes acceder a http://nombre-sitio-web y que se te solicita autenticación
+</code></pre>
+<p><img alt="alt" src="capturas/7.png" /></p>
+<pre><code>Comprobación 2
+
+Comprueba que si decides cancelar la autenticación, se te negará el acceso al sitio con un error. ¿Qué error es?
+</code></pre>
+<p><img alt="alt" src="capturas/8.png" /></p>
+<p>Nos da error 401, que es un código de estado HTTP que significa "No autorizado". Esto indica que la solicitud realizada por el cliente no tiene credenciales de autenticación válidas o que las credenciales proporcionadas no tienen permiso para acceder al recurso solicitado.</p>
+<h3 id="tarea-1">Tarea 1</h3>
+<ul>
+<li>
+<p>Intenta entrar primero con un usuario erróneo y luego con otro correcto. Puedes ver todos los sucesos y registros en los logs access.log y error.log</p>
+</li>
+<li>
+<p>Adjunta una captura de pantalla de los logs donde se vea que intentas entrar     primero con un usuario inválido y con otro válido. Indica dónde podemos ver los errores de usuario inválido o no encontrado, así como donde podemos ver el número de error que os aparecía antes</p>
+</li>
+</ul>
+<p>Registro de acceso:</p>
+<p><img alt="alt" src="capturas/9.png" /></p>
+<p>Registro de errores:</p>
+<p><img alt="alt" src="capturas/10.png" /></p>
+<h2 id="combinacion-de-la-autenticacion-basica-con-la-restriccion-de-acceso-por-ip">Combinación de la autenticación básica con la restricción de acceso por IP</h2>
+<ul>
+<li>Permitir o denegar acceso sobre una IP concreta (directivas allow y deny, respectivamente). Dentro del block server o archivo de configuración del dominio web, que recordad está en el directorio sites-available:</li>
+</ul>
+<p><img alt="alt" src="capturas/12.png" /></p>
+<p>El acceso se garantizará ala IP 192.168.1.219/24, excluyendo a la dirección 192.168.1.220.</p>
+<p>La directiva deny all denega el acceso a todo el mundo. </p>
+<ul>
+<li>Combinar la restricción IP y la autenticación HTTP con la directiva satisfy.</li>
+</ul>
+<p><img alt="alt" src="capturas/13.png" /></p>
+<p>Si establecemos el valor de la directiva a “all”, el acceso se permite si el cliente satisface ambas condiciones (IP y usario válido). Si lo establecemos a “any”, el acceso se permite si se satisface al menos una de las dos condiciones.</p>
+<h2 id="tareas">TAREAS</h2>
+<h3 id="tarea-1_1">TAREA 1</h3>
+<p>Configura Nginx para que no deje acceder con la IP de la máquina anfitriona al directorio raíz de una de tus dos webs. Modifica su server block o archivo de configuración. Comprueba como se deniega el acceso:
+- Muestra la página de error en el navegador</p>
+<ul>
+<li>Muestra el mensaje de error de error.log</li>
+</ul>
+<p>Denegamos el acceso a nuestra ip:</p>
+<p><img alt="alt" src="capturas/14.png" /></p>
+<p>Comprobamos el navegador:</p>
+<p><img alt="alt" src="capturas/15.png" /></p>
+<p>Y por último el registro de error:</p>
+<p><img alt="alt" src="capturas/16.png" /></p>
+<h3 id="tarea-2">TAREA 2</h3>
+<p>Configura Nginx para que desde tu máquina anfitriona se tenga que tener tanto una IP válida como un usuario válido, ambas cosas a la vez, y comprueba que sí puede acceder sin problemas</p>
+<p>Permitimos acceso a nuestra ip y activamos la solicitud de autorización:</p>
+<p><img alt="alt" src="capturas/17.png" /></p>
+<p>E introducimos las credenciales en el navegador:</p>
+<p><img alt="alt" src="capturas/18.png" /></p>
+<h2 id="cuestiones-finales">CUESTIONES FINALES</h2>
+<h3 id="cuestion-1">CUESTIÓN 1</h3>
+<p>Supongamos que yo soy el cliente con la IP 172.1.10.15 e intento acceder al directorio web_muy_guay de mi sitio web, equivocándome al poner el usuario y contraseña. ¿Podré acceder?¿Por qué?</p>
+<p><img alt="alt" src="capturas/c1.png" /></p>
+<pre><code>No se podrá acceder, ya que al haber configurado la opción &quot;satisfy all&quot;, estás exigiendo que se cumplan ambas condiciones: que la IP esté permitida y que la autenticación sea correcta.
+</code></pre>
+<h3 id="cuestion-2">CUESTIÓN 2</h3>
+<p>Supongamos que yo soy el cliente con la IP 172.1.10.15 e intento acceder al directorio web_muy_guay de mi sitio web, introduciendo correctamente usuari y contraseña. ¿Podré acceder?¿Por qué?</p>
+<p><img alt="alt" src="capturas/c2.png" /></p>
+<pre><code>Si ingresas el usuario y la contraseña correctos, podrás acceder al sitio porque cumples con ambas condiciones: la autenticación es válida y tu IP está autorizada.
+</code></pre>
+<h3 id="cuestion-3">CUESTIÓN 3</h3>
+<p>Supongamos que yo soy el cliente con la IP 172.1.10.15 e intento acceder al directorio web_muy_guay de mi sitio web, introduciendo correctamente usuario y contraseña. ¿Podré acceder?¿Por qué?</p>
+<p><img alt="alt" src="capturas/c3.png" /></p>
+<pre><code>En este caso, con &quot;satisfy any&quot;, aunque tu IP esté bloqueada, no podrás acceder a la web porque se está aplicando una restricción de IP que tiene prioridad.
+</code></pre>
+<h3 id="cuestion-4">CUESTIÓN 4</h3>
+<p>A lo mejor no sabéis que tengo una web para documentar todas mis excursiones espaciales con Jeff, es esta: Jeff Bezos y yo</p>
+<p>Supongamos que quiero restringir el acceso al directorio de proyectos porque es muy secreto, eso quiere decir añadir autenticación básica a la URL:Proyectos</p>
+<p>Completa la configuración para conseguirlo:</p>
+<p><img alt="alt" src="capturas/c4.png" /></p>
+<pre><code>server {
+    listen 80;
+    listen [::]:80;
+    root /var/www/freewebsitetemplates.com/preview/space-science;
+    index index.html index.htm index.nginx-debian.html;
+    server_name freewebsitetemplates.com www.freewebsitetemplates.com;
+    location /proyectos {
+        auth_basic &quot;Proyectos secretos&quot;;
+        auth_basic_user_file /etc/nginx/.htpasswd;
+        try_files $uri $uri/ =404;
+    }
+}
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.5.3
+Build Date UTC : 2024-10-17 21:26:29.146795+00:00
+-->
